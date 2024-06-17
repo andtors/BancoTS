@@ -1,10 +1,15 @@
-const express = require('express')
+import express = require('express')
+import config from 'config'
 const app = express()
+require('dotenv').config()
+const Logger =  require('./config/logger')
 
 app.use(express.json())
 
-app.get('/', (req: Request, res: Response) => {
-    res.send({message: 'Olá'})
-})
+import AccountRoutes from './routes/AccountRoutes'
 
-app.listen(3000)
+app.use('/', AccountRoutes)
+
+const port = config.get<number>("port")
+
+app.listen(port)
