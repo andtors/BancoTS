@@ -9,4 +9,7 @@ const router = Router()
 export default
 router.post('/create', AccountCreationValidation(), validate, AccountController.createAccount)
 router.get('/', verifyToken, AccountController.getAccount)
-
+router.patch('/transaction', verifyToken, AccountController.transaction)
+router.patch('/deposit', verifyToken, AccountController.deposit)
+router.patch('/withdraw', verifyToken, AccountController.withdraw)
+router.patch('/editaccount/:id', verifyToken, AccountController.editAccount)
