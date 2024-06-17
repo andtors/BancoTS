@@ -1,6 +1,8 @@
 import { Response, Request } from 'express'
 import Logger from '../config/logger'
 import bcrypt from 'bcrypt'
+const createUserToken = require('../helpers/create-user-token')
+const getUserByToken = require('../helpers/get-user-by-token')
 const Account = require('../models/Account')
 
 module.exports = class AccountController {
@@ -35,7 +37,7 @@ module.exports = class AccountController {
         try {
 
             await newAccount.save()
-            return res.status(201).json({newAccount})
+            await createUserToken(newAccount, req, res)
             
         } catch (e:any) {
             Logger.error(`Erro no sistema:  ${e.message}`)
@@ -43,5 +45,22 @@ module.exports = class AccountController {
 
         }
 
+        static async getAccount(req:Request, res: Response) {
+
+            let user
+
+            if(req.headers.authorization){
+                user = await getUserByToken(req)
+
+                user.password = undefined
+                user.balance = undefined
+                
+            } else {
+                res.status(401).send({message: 'Não há usuarios logado.'})
+            }
+
+            res.status(201).send(user)
+
+        }
     }
 

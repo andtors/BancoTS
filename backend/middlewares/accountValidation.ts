@@ -1,4 +1,5 @@
 import {body} from 'express-validator'
+const Account = require('../models/Account')
 
 export const AccountCreationValidation = () => {
     return [
@@ -7,7 +8,14 @@ export const AccountCreationValidation = () => {
             .withMessage('O nome é obrigatorio!'),
         body('email')
             .isString()
-            .withMessage('O e-mail é obrigatorio!'),
+            .withMessage('O e-mail é obrigatorio!')
+            .custom(async value => {
+                let emailCheck = await Account.findOne({ 'email': value });
+                if (emailCheck !== null) {
+                 return Promise.reject()
+                }
+              })
+              .withMessage('E-mail já em uso'),
         body('password')
             .isString()
             .withMessage('A senha é obrigatória!'),
