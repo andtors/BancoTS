@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken')
 const getToken = require('./get-token')
 import {Request, Response, NextFunction} from 'express'
-const Account = require('../models/Account')
 const checkToken = (req: Request, res: Response, next: NextFunction) => {
 
     if (!req.headers.authorization) {
