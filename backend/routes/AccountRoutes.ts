@@ -8,6 +8,7 @@ const router = Router()
 
 export default
 router.post('/create', AccountCreationValidation(), validate, AccountController.createAccount)
+router.post('/login', AccountController.login)
 router.get('/', verifyToken, AccountController.getAccount)
 router.patch('/transaction', verifyToken, AccountController.transaction)
 router.patch('/deposit', verifyToken, AccountController.deposit)

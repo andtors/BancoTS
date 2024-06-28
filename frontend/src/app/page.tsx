@@ -1,11 +1,27 @@
-import { Template } from "@/components";
+'use client'
+
+import { useEffect, useState } from "react";
+import DashboardPage from '@/app/dashboard/page'
+import AuthPage from '@/app/auth/page'
+import useAuth from "@/hooks/useAuth";
 
 export default function Home() {
-  return (
-   <Template>
-      <div>
-        <h1>Olá</h1>
-      </div>
-   </Template>
-  );
+/*
+  const [token, setToken] = useState([])
+  const {getUserToken} = useAuth()
+
+  useEffect(() => {
+    const decodedToken = getUserToken()
+    setToken(decodedToken)
+  }, [])
+
+  if(!token){
+    return <AuthPage />
+   } else {
+    return (
+      <DashboardPage />
+     )
+   }
+
+  */
 }

@@ -47,6 +47,31 @@ module.exports = class AccountController {
 
     }
 
+    static async login(req: Request, res: Response){
+        const {email, password} = req.body
+
+        if(!email){
+            res.status(401).send({message: 'Insira um e-mail'})
+        }
+        
+        if(!password){
+            res.status(401).send({message: 'Insira uma senha'})
+        }
+
+        const user = await Account.findOne({email: email})
+
+        if(!user){
+            res.status(401).send({message: 'Não há usuarios cadastrados com esse e-mail!'})
+        }
+
+        const checkPassword = await bcrypt.compare(password, user.password)
+        if (!checkPassword) {
+            return res.status(422).json({ message: "Senha inválida!" })
+        }
+
+        await createUserToken(user, req, res)
+    }
+
     static async getAccount(req: Request, res: Response) {
 
         let user
@@ -66,15 +91,13 @@ module.exports = class AccountController {
 
     static async deposit(req: Request, res: Response) {
 
-        const depositValue = req.body.depositValue
+        const {depositValue, idAccount} = req.body
 
-        const currentAccount = await getUserByToken(req)
+        const currentAccount = await Account.findOne({_id: idAccount})
 
         currentAccount.balance = currentAccount.balance + depositValue
 
-
         try {
-
             await Account.findByIdAndUpdate({ '_id': currentAccount._id }, currentAccount, { new: true })
             res.status(201).send({ message: 'Valor depositado com sucesso!' })
         } catch (error) {
@@ -85,9 +108,9 @@ module.exports = class AccountController {
 
     static async withdraw(req: Request, res: Response) {
 
-        const withdrawValue = req.body.withdrawValue
+        const {withdrawValue, idAccount} = req.body
 
-        const currentAccount = await getUserByToken(req)
+        const currentAccount = await Account.findOne({_id: idAccount})
 
         if (currentAccount.balance < withdrawValue) {
             return res.status(401).send({ message: 'Saldo insuficiente!' })
@@ -109,9 +132,9 @@ module.exports = class AccountController {
 
     static async transaction(req: Request, res: Response) {
 
-        const { valueToTransfer, agencyNumber, accountNumber } = req.body
-
-        const currentAccount = await getUserByToken(req)
+        const { accountNumber,  agencyNumber, valueToTransfer, idAccount } = req.body
+        
+        const currentAccount = await Account.findOne({_id: idAccount})
 
         const checkAgencyNumberExists = await Account.findOne({ 'agencynumber': agencyNumber })
 

@@ -6,6 +6,7 @@ const createUserToken = async (account:IAccount, req: Request, res: Response) =>
 
     const token = jwt.sign({
         name: account.name,
+        email: account.email,
         id: account._id
     }, 'bancots')
 
