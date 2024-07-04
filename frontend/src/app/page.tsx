@@ -6,7 +6,7 @@ import AuthPage from '@/app/auth/page'
 import useAuth from "@/hooks/useAuth";
 
 export default function Home() {
-/*
+
   const [token, setToken] = useState([])
   const {getUserToken} = useAuth()
 
@@ -22,6 +22,4 @@ export default function Home() {
       <DashboardPage />
      )
    }
-
-  */
 }

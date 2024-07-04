@@ -78,6 +78,7 @@ const page = () => {
 
 
     return (
+        
         <Template>
             <div className="border-2 px-10 py-10 border-none rounded-md shadow-2xl">
                 <div className="rounded-md shadow-2xl px-10 py-4 mb-4">
